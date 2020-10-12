@@ -6,7 +6,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +26,7 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         if (request.getParameter("logout") != null) {
-            session.invalidate(); 
+            session.invalidate();
         }
 
         if (user != null) {
@@ -50,20 +49,15 @@ public class LoginServlet extends HttpServlet {
             if (user != null) {
                 session.setAttribute("user", user);
                 response.sendRedirect("home");
-            } else {
-                //bad user/password
-                request.setAttribute("username", request.getParameter("username"));
-                request.setAttribute("password", request.getParameter("password"));
-                request.setAttribute("message", "Invalid login");
-                getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+                return;
             }
-
-        } else {
-            // bad input
-            request.setAttribute("username", request.getParameter("username"));
-            request.setAttribute("password", request.getParameter("password"));
-            request.setAttribute("message", "Invalid login");
-            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
+        
+        // bad input or invalid user/password
+        request.setAttribute("username", request.getParameter("username"));
+        request.setAttribute("password", request.getParameter("password"));
+        request.setAttribute("message", "Invalid login");
+        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+
     }
 }
